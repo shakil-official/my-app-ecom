@@ -1,14 +1,18 @@
-import React from "react";
+"use client"
+
+import Category from "@/components/category/category";
 import MainLayout from "@/components/Layouts/MainLayout";
 
+
 const Home = () => {
+
     return (
         <>
             <MainLayout>
-                <h1>HELLO COMMENT </h1>
-                {/*<ProductManager/>*/}
+                <Category/>
             </MainLayout>
         </>
     );
-}
+};
+
 export default Home;

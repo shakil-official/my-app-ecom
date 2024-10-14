@@ -11,7 +11,7 @@ const SidebarList = () => {
 
     return (
         <Sidebar>
-            <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" alert={true} />
+            {/*<SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" alert={true} />*/}
             <SidebarItem icon={<Settings size={20} />} text="Settings" subItems={subItems} />
         </Sidebar>
     );
