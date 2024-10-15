@@ -1,22 +1,16 @@
 "use client"
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@ui/card"
-
-import DialogComponent from "@/components/Helper/components/DialogComponent";
-import {PlusCircle} from "lucide-react";
-import CategoryForm from "@/components/category/CategoryForm";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@ui/card"
+import DialogComponent from "@/components/Reusable/DialogComponent";
+import CategoryFormCreate from "@/components/Category/CategoryFormCreate";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {RootState} from "@/store/store";
 import {dialogReset} from "@/store/slices/categorySlice";
-import {DataTableDemo} from "@/components/Helper/components/DataTableDemo";
+
+import CategoryDataTable from "@/components/Category/CategoryDataTable";
+import {PlusCircle} from "lucide-react";
+
 
 const Category = () => {
 
@@ -34,8 +28,8 @@ const Category = () => {
             setDialogOpen(() => false);
             dispatch(dialogReset()); // Dispatch the dialogReset action to reset the close state
         }
-
     }, [close, dispatch]);
+
 
     return (
         <>
@@ -44,31 +38,25 @@ const Category = () => {
                     <DialogComponent
                         buttonLabel="Add Category"
                         dialogTitle="Category Add"
-                        dialogClass="md:max-w-screen-lg absolute top-[270px] sm:max-w-screen-lg sm:item-center"
                         open={isDialogOpen}
                         onToggle={toggleDialog} // Pass the toggle function
                         icon={<PlusCircle className="h-3.5 w-3.5"/>} // Pass the icon here
                     >
-                        <CategoryForm/>
-
+                        <CategoryFormCreate/>
                     </DialogComponent>
                 </div>
 
                 <Card x-chunk="dashboard-06-chunk-0">
                     <CardHeader>
-                        <CardTitle>Category</CardTitle>
+                        <CardTitle>Category Manage</CardTitle>
                         <CardDescription>
-                            Manage your products and view their sales performance.
+                            Manage your category.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-
-                        <DataTableDemo></DataTableDemo>
-
-
+                        <CategoryDataTable/>
                     </CardContent>
                     <CardFooter>
-
                     </CardFooter>
                 </Card>
             </main>

@@ -3,6 +3,7 @@ import {CategoryDatatableInterface} from "@/interface/CategoryDatatableInterface
 
 
 export interface categoryInterface extends CategoryCreateInterface {
+    id?: number | null;
     loading: boolean;
     create: boolean;
     error: boolean | string | null;
@@ -14,4 +15,5 @@ export interface categoryInterface extends CategoryCreateInterface {
     total: number; // Total number of categories
     page: number; // Current page number
     limit: number; // Default limit per page
+    dataTableReload: boolean; // Default limit per page
 }

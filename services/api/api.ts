@@ -17,6 +17,20 @@ export function createCategoryApi(payloads: categoryInterface) {
     return axios.post(`${API_BASE_URL}v1/categories/create`, payloads, {headers}); // Adjust the endpoint as needed
 }
 
+export function updateCategoryApi(payloads: categoryInterface) {
+
+    // Get the token from localStorage
+    const token = localStorage.getItem('token'); // Adjust the key if necessary
+
+    // Set up the headers
+    const headers = {
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+        'Content-Type': 'application/json', // Ensure the correct content type
+    };
+
+    return axios.put(`${API_BASE_URL}v1/categories/${payloads.id}`, payloads, {headers}); // Adjust the endpoint as needed
+}
+
 export function fetchingCategoryApi(page: number, limit: number) {
     // Get the token from localStorage
     const token = localStorage.getItem('token'); // Adjust the key if necessary

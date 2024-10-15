@@ -1,6 +1,6 @@
 "use client"
 
-import Category from "@/components/category/category";
+import Category from "@/components/Category/Category";
 import MainLayout from "@/components/Layouts/MainLayout";
 
 

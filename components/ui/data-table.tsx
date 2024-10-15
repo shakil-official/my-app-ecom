@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
     ColumnDef,
@@ -13,17 +11,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import {MoreHorizontal} from "lucide-react";
 import {Button} from "@ui/button";
-import {Checkbox} from "@ui/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -32,97 +20,48 @@ import {
     TableHeader,
     TableRow,
 } from "@ui/table";
-import {Input} from "@ui/input";
-import {useState, useEffect} from "react";
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from "@/store/store"; // Adjust the import path accordingly
-import {fetchCategoriesStart, setPage} from "@/store/slices/categorySlice";
-import {CategoryDatatableInterface} from "@/interface/CategoryDatatableInterface"; // Adjust the path accordingly
 
 
+interface CustomColumnFilter {
+    id: string; // The column ID
+    // component: (value: string, setValue: (newValue: string) => void) => JSX.Element; // A function that returns a JSX component
+    component: (value: string, setValue: (newValue: string) => void) => React.ReactNode; // A function that returns a React node
 
-export const columns: ColumnDef<CategoryDatatableInterface>[] = [
-    {
-        id: "select",
-        header: ({table}) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({row}) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "name",
-        header: "Name",
-        cell: ({row}) => <div className="capitalize">{row.getValue("name")}</div>,
-    },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({row}) => (
-            <div className="capitalize">{row.getValue("status")}</div>
-        ),
-    },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({row}) => {
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4"/>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => {
-                                navigator.clipboard.writeText(String(row.original.id));
-                            }}
-                        >
-                            Copy category ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuItem>View details</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
-        },
-    },
-];
+}
 
-export function DataTableDemo() {
-    const dispatch = useDispatch();
-    const {categories, total, page, limit, loading} = useSelector((state: RootState) => state.category);
+interface DataTableProps<T> {
+    columns: ColumnDef<T>[];
+    data: T[];
+    isLoading?: boolean;
+    total?: number;
+    page: number;
+    limit: number;
+    onPageChange: (newPage: number) => void;
+    filters?: CustomColumnFilter[]; // Use the custom filter type
 
-    console.log({categories, total, page, limit, loading})
+}
 
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = useState({});
+// Define your filter interface that includes a component property
 
-    useEffect(() => {
-        dispatch(fetchCategoriesStart({page, limit}));
-    }, [dispatch, page, limit]);
+
+export function DataTable<T>({
+                                 columns,
+                                 data,
+                                 isLoading = false,
+                                 total = 0,
+                                 page,
+                                 limit,
+                                 onPageChange,
+                                 filters, // Accept filters as prop
+                             }: DataTableProps<T>) {
+
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = React.useState({});
 
     const table = useReactTable({
-        data: categories,
+        data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -137,21 +76,26 @@ export function DataTableDemo() {
             columnFilters,
             columnVisibility,
             rowSelection,
+
         },
     });
 
     return (
         <div className="w-full">
             <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter by name..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+                {/* Render filter components dynamically */}
+                {filters?.map((filter) => {
+                    const column = table.getColumn(filter.id);
+                    const filterValue = column?.getFilterValue() as string;
 
+                    return (
+                        <div key={filter.id}>
+                            {filter.component(filterValue, (newValue) =>
+                                column?.setFilterValue(newValue)
+                            )}
+                        </div>
+                    );
+                })}
 
             </div>
             <div className="rounded-md border">
@@ -173,13 +117,13 @@ export function DataTableDemo() {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {loading ? (
+                        {isLoading ? (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
                                     Loading...
                                 </TableCell>
                             </TableRow>
-                        ) : categories.length ? (
+                        ) : data.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
@@ -214,7 +158,7 @@ export function DataTableDemo() {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => dispatch(setPage(Math.max(page - 1, 1)))}
+                        onClick={() => onPageChange(Math.max(page - 1, 1))}
                         disabled={page === 1}
                     >
                         Previous
@@ -222,16 +166,13 @@ export function DataTableDemo() {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => {
-                            dispatch(setPage(Math.min(page + 1, Math.ceil(total / limit))));
-                        }}
+                        onClick={() => onPageChange(Math.min(page + 1, Math.ceil(total / limit)))}
                         disabled={page * limit >= total}
                     >
                         Next
                     </Button>
                 </div>
             </div>
-
         </div>
     );
 }
