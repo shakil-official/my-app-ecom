@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <>
             <MainLayout>
-                <h1>HELLO COMMENT </h1>
+                <h1>HELLO COMMENT cool</h1>
                 {/*<ProductManager/>*/}
             </MainLayout>
         </>

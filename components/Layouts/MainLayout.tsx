@@ -1,3 +1,4 @@
+"use client"; // Mark this component as a client component
 import SidebarMenu from "@/components/Menu/SidebarMenu";
 import HeaderBar from "@/components/Layouts/HeaderBar";
 import React from "react";
