@@ -8,8 +8,8 @@ import {
     DialogFooter,
     DialogClose
 } from '@ui/dialog'; // Importing dialog components
-import { Button } from '@ui/button'; // Importing the button component
-import React, { ReactNode } from 'react'; // Importing ReactNode for children type
+import {Button} from '@ui/button'; // Importing the button component
+import React, {ReactNode} from 'react'; // Importing ReactNode for children type
 
 // Define an interface for the props
 interface DialogComponentProps {
@@ -22,6 +22,7 @@ interface DialogComponentProps {
     children?: ReactNode; // Children prop for additional content
     open: boolean; // Open state controlled by the parent
     onToggle: (open: boolean) => void; // Callback to toggle dialog open state
+    closeBtn?: boolean;
 }
 
 const DialogComponent: React.FC<DialogComponentProps> = ({
@@ -30,10 +31,11 @@ const DialogComponent: React.FC<DialogComponentProps> = ({
                                                              icon,
                                                              size = "lg",
                                                              buttonClass = "h-7 gap-1",
-                                                             dialogClass = "md:max-w-screen-lg",
+                                                             dialogClass = "sm:max-w-[425px]", //md:max-w-screen-lg
                                                              children,
                                                              open,
                                                              onToggle,
+                                                             closeBtn = false,
                                                          }) => {
     return (
         <Dialog open={open} onOpenChange={onToggle}>
@@ -59,11 +61,11 @@ const DialogComponent: React.FC<DialogComponentProps> = ({
                 </div>
 
                 <DialogFooter className="sm:justify-end">
-                    <DialogClose asChild onClick={() => onToggle(false)}>
+                    {closeBtn && <DialogClose asChild onClick={() => onToggle(false)}>
                         <Button type="button" variant="secondary">
                             Close
                         </Button>
-                    </DialogClose>
+                    </DialogClose>}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

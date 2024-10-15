@@ -22,7 +22,7 @@ const formSchema = z.object({
     }),
     status: z.boolean(),
 });
-const CategoryForm: React.FC = () => {
+const CategoryFormCreate: React.FC = () => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -58,8 +58,6 @@ const CategoryForm: React.FC = () => {
                 description: "Category created"
             })
         }
-
-
     }, [error, responseErrorMessage, success, toast]);
 
 
@@ -116,10 +114,8 @@ const CategoryForm: React.FC = () => {
                     </Button>
                 </form>
             </Form>
-
-
         </>
     );
 };
 
-export default CategoryForm;
+export default CategoryFormCreate;

@@ -2,10 +2,8 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {categoryInterface} from "@/interface/categoryInterface";
 import {CategoryCreateInterface} from "@/interface/CategoryCreateInterface";
 
-
-
-
 const initialState: categoryInterface = {
+    id: null,
     name: '',
     status: 'inactive', // Set initial status as 'inactive'
     loading: false,
@@ -19,7 +17,8 @@ const initialState: categoryInterface = {
     categories: [], // For storing fetched categories
     total: 0, // Total number of categories
     page: 1, // Current page number
-    limit: 2, // Default limit per page
+    limit: 2, // Default limit per page,
+    dataTableReload: true
 }
 
 // Define the payload type for fetching categories
@@ -33,7 +32,6 @@ const categorySlice = createSlice({
     name: 'category',
     initialState,
     reducers: {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         createRequest(state, action: PayloadAction<CategoryCreateInterface>) {
             state.loading = true;
             state.error = false;
@@ -41,18 +39,28 @@ const categorySlice = createSlice({
             state.close = false;
             state.status = action.payload.status
         },
+
+        updateRequest(state, action: PayloadAction<CategoryCreateInterface>) {
+            state.error = false;
+            state.success = false;
+            state.close = false;
+            state.status = action.payload.status;
+            state.id = action.payload.id;
+        },
+
         success(state) {
             state.close = true;
             state.success = true;
             state.error = false;
             state.loading = false;
+            state.dataTableReload = !state.dataTableReload;
         },
         failure(state, action: PayloadAction<string | null>) {
             state.error = true;
             state.close = false;
             state.success = false;
             state.loading = false;
-            state.responseErrorMessage = action.payload
+            state.responseErrorMessage = action.payload;
         },
         dialogReset(state) {
             state.close = false; // Reset close as well
@@ -92,6 +100,7 @@ const categorySlice = createSlice({
 
 export const {
     createRequest,
+    updateRequest,
     success,
     failure,
     dialogReset,
