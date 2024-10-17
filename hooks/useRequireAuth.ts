@@ -1,24 +1,39 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation'; // Use next/navigation for Next.js 13
-import { RootState } from '@/store/store';
-import { usePathname } from 'next/navigation'; // Import usePathname hook
+import {useEffect, useState} from 'react';
+import {usePathname, useRouter} from 'next/navigation'; // Use next/navigation for Next.js 13
+import validateToken from "@/services/api/tokenValidation"; // Import your token validation function
 
 const useRequireAuth = () => {
     const router = useRouter();
     const pathname = usePathname(); // Get current pathname
-    const isLogin = useSelector((state: RootState) => state.auth.isLogin);
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null; // Get token from local storage
+    const [token, setToken] = useState<string | null>(null); // Use state to handle token
 
     useEffect(() => {
-        const isAuthenticated = isLogin || !!token; // Check if authenticated from Redux state or local storage
-
-        if (!isAuthenticated) {
-            router.push('/login'); // Redirect to login page
-        } else if (pathname === '/login') {
-            router.push('/'); // Redirect to home or another page if logged in
+        // Ensure this runs only on the client
+        if (typeof window !== 'undefined') {
+            const storedToken = localStorage.getItem('token');
+            setToken(storedToken); // Set the token in state only once
         }
-    }, [isLogin, pathname, router, token]); // Include token in the dependency array
+    }, []); // Run this effect once on component mount
+
+    useEffect(() => {
+        // Proceed only if the token exists
+        if (token) {
+            validateToken(token)
+                .then((response) => {
+                    console.log(response);
+                    if (pathname === '/login') {
+                        router.push('/'); // Redirect to home if already logged in
+                    }
+                })
+                .catch((error) => {
+                    console.error('Token validation failed:', error);
+                    localStorage.removeItem('token'); // Remove the invalid token
+                    router.push('/login'); // Redirect to login if validation fails
+                });
+        }
+    }, [token, pathname, router]); // Depend on token, pathname, and router
+
+    return null; // No UI rendering from this hook
 };
 
 export default useRequireAuth;

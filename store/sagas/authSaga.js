@@ -19,8 +19,9 @@ function* handleLogin(action) {
         // Store the token in localStorage
         localStorage.setItem('token', token);
     } catch (error) {
+        console.log(error)
         // Dispatch failure action with error message
-        yield put(loginFailure(error.response.data.error));
+        yield put(loginFailure(error.response.data));
     }
 }
 
