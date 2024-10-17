@@ -34,8 +34,7 @@ const ActionList: React.FC<ActionListProps> = ({component: Component}) => {
                     <DropdownMenuItem onClick={toggleDialog}>
                         Edit
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator/>
-                </DropdownMenuContent>
+                 </DropdownMenuContent>
             </DropdownMenu>
 
             {

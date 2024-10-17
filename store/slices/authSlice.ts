@@ -5,8 +5,9 @@ interface AuthState {
     user: User | null;       // Define User type based on your user structure
     token: string | null;
     loading: boolean;
-    error: string | null;
+    error: boolean;
     isLogin: boolean;
+    errorMessage: string;
 }
 
 // Define User type according to your user model
@@ -27,8 +28,9 @@ const initialState: AuthState = {
     user: null,
     token: null,
     loading: false,
-    error: null,
-    isLogin: false
+    error: false,
+    isLogin: false,
+    errorMessage: "",
 };
 
 // Create the auth slice
@@ -39,26 +41,25 @@ const authSlice = createSlice({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         loginRequest(state, action: PayloadAction<LoginCredentials>) {
             state.loading = true;
-            state.error = null; // Clear any previous errors
+            state.error = false; // Clear any previous errors
             state.isLogin = false;
         },
         loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
             state.loading = false;
             state.user = action.payload.user;
             state.token = action.payload.token;
-            state.error = null;
+            state.error = false;
             state.isLogin = true;
         },
-        loginFailure(state, action: PayloadAction<string>) {
-            console.log(action.payload)
+        loginFailure(state, action: PayloadAction<{ message: string }>) {
             state.loading = false;
-            state.error = action.payload;
+            state.error = true;
+            state.errorMessage = action.payload.message;
             state.isLogin = false;
         },
         logout(state) {
             state.user = null;
             state.token = null;
-            state.error = null;
             state.isLogin = false;
         },
     },
