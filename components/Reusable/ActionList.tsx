@@ -13,12 +13,14 @@ import ActionDialog from "@/components/Reusable/ActionDialog";
 
 interface ActionListProps {
     component?: React.ReactNode;
+    dropdownMenuItems?: React.ReactNode[] | undefined;
 }
 
-const ActionList: React.FC<ActionListProps> = ({component: Component}) => {
+const ActionList: React.FC<ActionListProps> = ({component: Component, dropdownMenuItems: dropdownMenuItems}) => {
 
     const [toggle, setToggle] = useState(false)
     const toggleDialog = () => setToggle(() => !toggle)
+
 
     return (
         <>
@@ -34,7 +36,14 @@ const ActionList: React.FC<ActionListProps> = ({component: Component}) => {
                     <DropdownMenuItem onClick={toggleDialog}>
                         Edit
                     </DropdownMenuItem>
-                 </DropdownMenuContent>
+                    {
+                        dropdownMenuItems?.map((dropdownMenuItem: React.ReactNode, index: number) => (
+                            <React.Fragment key={index}>
+                                {dropdownMenuItem}
+                            </React.Fragment>
+                        ))
+                    }
+                </DropdownMenuContent>
             </DropdownMenu>
 
             {

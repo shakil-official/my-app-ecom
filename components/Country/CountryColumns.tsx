@@ -1,10 +1,10 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {CategoryDatatableInterface} from "@/interface/category/CategoryDatatableInterface";
+import {CountryDatatableInterface} from "@/interface/country/CountryDatatableInterface";
 import ActionList from "@/components/Reusable/ActionList";
-import CategoryFormUpdate from "@/components/Category/CategoryFormUpdate";
-import CategoryDelete from "@/components/Category/CategoryDelete";
+import CountryFormUpdate from "@/components/Country/CountryFormUpdate";
+import CountryDelete from "@/components/Country/CountryDelete";
 
-export const CategoryColumns: ColumnDef<CategoryDatatableInterface>[] = [
+export const CountryColumns: ColumnDef<CountryDatatableInterface>[] = [
     {
         accessorKey: "name",
         header: "Name",
@@ -21,15 +21,15 @@ export const CategoryColumns: ColumnDef<CategoryDatatableInterface>[] = [
         id: "actions",
         enableHiding: false,
         cell: ({row}) => {
-            const categoryId: number = row.original.id;
+            const countryId: number = row.original.id;
 
             return (
                 <ActionList
                     dropdownMenuItems={[
-                        <CategoryDelete key={`delete-${categoryId}`} data={categoryId}/>,  // Assign unique key and pass id
+                        <CountryDelete key={`delete-${countryId}`} data={countryId}/>,  // Assign unique key and pass id
                     ]}
                     component={
-                        <CategoryFormUpdate categoryName={row.getValue('name')}
+                        <CountryFormUpdate countryName={row.getValue('name')}
                                             id={row.original.id}
                                             status={row.getValue('status') === 'active'}
                         />

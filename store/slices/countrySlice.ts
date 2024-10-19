@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {categoryInterface} from "@/interface/category/categoryInterface";
-import {CategoryCreateInterface} from "@/interface/category/CategoryCreateInterface";
+import {countryInterface} from "@/interface/country/CountryInterface";
+import {CountryCreateInterface} from "@/interface/country/CountryCreateInterface";
 
-const initialState: categoryInterface = {
+const initialState: countryInterface = {
     id: null,
     name: '',
     status: 'inactive', // Set initial status as 'inactive'
@@ -14,8 +14,8 @@ const initialState: categoryInterface = {
     close: false,
     // data table
     responseError: null, // Assuming this is part of the interface
-    categories: [], // For storing fetched categories
-    total: 0, // Total number of categories
+    countries: [], // For storing fetched countries
+    total: 0, // Total number of countries
     page: 1, // Current page number
     limit: 10, // Default limit per page,
     dataTableReload: true,
@@ -26,8 +26,8 @@ const initialState: categoryInterface = {
     }
 }
 
-// Define the payload type for fetching categories
-interface FetchCategoriesPayload {
+// Define the payload type for fetching countries
+interface FetchCountriesPayload {
     page: number;
     limit: number;
     query: {
@@ -37,11 +37,11 @@ interface FetchCategoriesPayload {
 }
 
 
-const categorySlice = createSlice({
-    name: 'category',
+const countrySlice = createSlice({
+    name: 'country',
     initialState,
     reducers: {
-        createRequest(state, action: PayloadAction<CategoryCreateInterface>) {
+        createRequest(state, action: PayloadAction<CountryCreateInterface>) {
             state.loading = true;
             state.error = false;
             state.success = false;
@@ -49,7 +49,7 @@ const categorySlice = createSlice({
             state.status = action.payload.status
         },
 
-        updateRequest(state, action: PayloadAction<CategoryCreateInterface>) {
+        updateRequest(state, action: PayloadAction<CountryCreateInterface>) {
             state.error = false;
             state.success = false;
             state.close = false;
@@ -81,21 +81,21 @@ const categorySlice = createSlice({
             state.close = false; // Reset close as well
             state.success = false; // Reset close as well
         },
-        // Fetching categories start
-        fetchCategoriesStart(state, action: PayloadAction<FetchCategoriesPayload>) {
+        // Fetching countries start
+        fetchCountriesStart(state, action: PayloadAction<FetchCountriesPayload>) {
             state.loading = true;
             state.error = null; // Reset error when a new fetch starts
             state.page = action.payload.page;
             state.limit = action.payload.limit;
         },
-        // Fetching categories success
-        fetchCategoriesSuccess(state, action: PayloadAction<{ categories: []; total: number }>) {
-            state.categories = action.payload.categories; // Set fetched categories
-            state.total = action.payload.total; // Set total number of categories
+        // Fetching countries success
+        fetchCountriesSuccess(state, action: PayloadAction<{ countries: []; total: number }>) {
+            state.countries = action.payload.countries; // Set fetched countries
+            state.total = action.payload.total; // Set total number of countries
             state.loading = false; // Stop loading
         },
-        // Fetching categories failure
-        fetchCategoriesFailure(state, action: PayloadAction<string>) {
+        // Fetching countries failure
+        fetchCountriesFailure(state, action: PayloadAction<string>) {
             state.loading = false;
             state.error = action.payload; // Set the error message
         },
@@ -122,12 +122,12 @@ export const {
     success,
     failure,
     dialogReset,
-    fetchCategoriesStart,
-    fetchCategoriesSuccess,
-    fetchCategoriesFailure,
+    fetchCountriesStart,
+    fetchCountriesSuccess,
+    fetchCountriesFailure,
     setPage,
     setName,
     setStatus,
     deleteRequest,
-} = categorySlice.actions;
-export default categorySlice.reducer;
+} = countrySlice.actions;
+export default countrySlice.reducer;

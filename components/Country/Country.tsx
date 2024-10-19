@@ -2,26 +2,26 @@
 
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@ui/card"
 import DialogComponent from "@/components/Reusable/DialogComponent";
-import CategoryFormCreate from "@/components/Category/CategoryFormCreate";
+import CountryFormCreate from "@/components/Country/CountryFormCreate";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {RootState} from "@/store/store";
-import {dialogReset} from "@/store/slices/categorySlice";
-import CategoryDataTable from "@/components/Category/CategoryDataTable";
+import {dialogReset} from "@/store/slices/countrySlice";
+import CountryDataTable from "@/components/Country/CountryDataTable";
 import {PlusCircle} from "lucide-react";
 import {toast} from "@/hooks/use-toast";
 
 
-const Category = () => {
+const Country = () => {
 
     const [isDialogOpen, setDialogOpen] = useState(false); // State to control dialog open/close
     const toggleDialog = (open: boolean) => {
         setDialogOpen(open);
     };
 
-    const {close} = useSelector((state: RootState) => state.category)
+    const {close} = useSelector((state: RootState) => state.country)
     const dispatch = useDispatch(); // Initialize the dispatch function
-    const {error, responseErrorMessage, success, message} = useSelector((state: RootState) => state.category)
+    const {error, responseErrorMessage, success, message} = useSelector((state: RootState) => state.country)
 
 
     useEffect(() => {
@@ -55,25 +55,25 @@ const Category = () => {
             <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                 <div className="ml-auto flex items-center gap-2">
                     <DialogComponent
-                        buttonLabel="Add Category"
-                        dialogTitle="Category Add"
+                        buttonLabel="Add Country"
+                        dialogTitle="Country Add"
                         open={isDialogOpen}
                         onToggle={toggleDialog} // Pass the toggle function
                         icon={<PlusCircle className="h-3.5 w-3.5"/>} // Pass the icon here
                     >
-                        <CategoryFormCreate/>
+                        <CountryFormCreate/>
                     </DialogComponent>
                 </div>
 
                 <Card x-chunk="dashboard-06-chunk-0">
                     <CardHeader>
-                        <CardTitle>Category Manage</CardTitle>
+                        <CardTitle>Country Manage</CardTitle>
                         <CardDescription>
-                            Manage your category.
+                            Manage your country.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <CategoryDataTable/>
+                        <CountryDataTable/>
                     </CardContent>
                     <CardFooter>
                     </CardFooter>
@@ -83,4 +83,4 @@ const Category = () => {
     );
 };
 
-export default Category;
+export default Country;
