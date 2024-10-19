@@ -27,7 +27,7 @@ const CountryFormCreate: React.FC = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            countryName: "",
+            countryName: "", // country
             status: true,
         }
     });
