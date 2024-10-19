@@ -1,35 +1,33 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import * as z from 'zod';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormDescription, FormMessage} from '@ui/form';
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from '@ui/form';
 import {Input} from "@ui/input";
 import {Button} from "@ui/button";
 import {Switch} from "@ui/switch";
-import {useDispatch, useSelector} from "react-redux";
-import {updateRequest} from "@/store/slices/categorySlice";
-import {RootState} from "@/store/store";
-import {useToast} from "@/hooks/use-toast"
-import {CategoryFormUpdatePropsInterface} from "@/interface/category/CategoryFormUpdatePropsInterface";
+import {useDispatch} from "react-redux";
+import {updateRequest} from "@/store/slices/countrySlice";
+import {CountryFormUpdatePropsInterface} from "@/interface/country/CountryFormUpdatePropsInterface";
 
 
 const formSchema = z.object({
-    categoryName: z.string().max(50, {
-        message: "Category name can not be more then 50 character",
+    countryName: z.string().max(50, {
+        message: "Country name can not be more then 50 character",
     }).min(1, {
-        message: "Category name is required"
+        message: "Country name is required"
     }),
     status: z.boolean(),
     id: z.onumber()
 });
-const CategoryFormUpdate: React.FC<CategoryFormUpdatePropsInterface> = ({id, categoryName, status}) => {
+const CountryFormUpdate: React.FC<CountryFormUpdatePropsInterface> = ({id, countryName, status}) => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            categoryName: categoryName,
+            countryName: countryName,
             status: status,
             id: id
         }
@@ -40,7 +38,7 @@ const CategoryFormUpdate: React.FC<CategoryFormUpdatePropsInterface> = ({id, cat
     const handleUpdate = (values: z.infer<typeof formSchema>) => {
         dispatch(updateRequest({
             id: id,
-            name: values.categoryName,
+            name: values.countryName,
             status: values.status ? 'active' : 'inactive'
         }));
 
@@ -57,16 +55,16 @@ const CategoryFormUpdate: React.FC<CategoryFormUpdatePropsInterface> = ({id, cat
                     onSubmit={form.handleSubmit(handleUpdate)}
                     className="max-w-screen-lg w-full flex flex-col gap-4"
                 >
-                    <FormField name="categoryName"
+                    <FormField name="countryName"
                                control={form.control}
                                render={({field}) => {
                                    return (
                                        <FormItem>
-                                           <FormLabel>Category name</FormLabel>
+                                           <FormLabel>Country name</FormLabel>
                                            <FormControl>
                                                <Input
                                                    type="text"
-                                                   placeholder="Please enter category name"
+                                                   placeholder="Please enter country name"
                                                    {...field} />
                                            </FormControl>
                                            <FormMessage/>
@@ -110,5 +108,5 @@ const CategoryFormUpdate: React.FC<CategoryFormUpdatePropsInterface> = ({id, cat
     );
 };
 
-export default CategoryFormUpdate;
+export default CountryFormUpdate;
 

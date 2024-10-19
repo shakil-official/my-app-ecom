@@ -1,34 +1,35 @@
 import {DataTable} from "@ui/data-table";
-import {fetchCategoriesStart, setName, setPage, setStatus} from "@/store/slices/categorySlice";
+import {fetchCountriesStart, setName, setPage, setStatus} from "@/store/slices/countrySlice";
 import {Input} from "@ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@ui/select";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/store";
 import {useEffect} from "react";
-import {CategoryColumns} from "@/components/Category/CategoryColumns";
+import {CountryColumns} from "@/components/Country/CountryColumns";
 
-const CategoryDataTable = () => {
+const CountryDataTable = () => {
 
     const dispatch = useDispatch(); // Initialize the dispatch function
     const {
-        categories,
+        countries,
         total,
         page,
         limit,
         query,
         loading,
         dataTableReload
-    } = useSelector((state: RootState) => state.category);
+    } = useSelector((state: RootState) => state.country);
 
     useEffect(() => {
-        dispatch(fetchCategoriesStart({page, limit, query}));
+        dispatch(fetchCountriesStart({page, limit, query}));
     }, [dispatch, page, limit, dataTableReload, query]);
 
+    console.log(countries)
 
     return (
         <>
-            <DataTable data={categories}
-                       columns={CategoryColumns}
+            <DataTable data={countries}
+                       columns={CountryColumns}
                        limit={limit}
                        total={total}
                        page={page}
@@ -78,4 +79,4 @@ const CategoryDataTable = () => {
 }
 
 
-export default CategoryDataTable;
+export default CountryDataTable;

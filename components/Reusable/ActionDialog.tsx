@@ -6,7 +6,7 @@ import {
     DialogHeader,
     DialogTitle
 } from "@ui/dialog";
-import {ActionDialogPropsInterface} from "@/interface/ActionDialogPropsInterface";
+import {ActionDialogPropsInterface} from "@/interface/category/ActionDialogPropsInterface";
 
 const ActionDialog: React.FC<ActionDialogPropsInterface> = ({title, description, open, onClose, children}) => {
 

@@ -1,14 +1,15 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {
     createRequest,
-    updateRequest,
+    deleteRequest,
     failure,
-    success,
+    fetchCategoriesFailure,
     fetchCategoriesStart,
     fetchCategoriesSuccess,
-    fetchCategoriesFailure
+    success,
+    updateRequest
 } from "../slices/categorySlice";
-import {createCategoryApi, fetchingCategoryApi, updateCategoryApi} from "@/services/api/api";
+import {createCategoryApi, deleteCategoryApi, fetchingCategoryApi, updateCategoryApi} from "@/services/api/categoryApi";
 
 
 function* handleCategoryCreate(action) {
@@ -16,7 +17,7 @@ function* handleCategoryCreate(action) {
         const response = yield call(createCategoryApi, action.payload);
         const {} = response.data;
 
-        yield put(success())
+        yield put(success({message: "Category created successfully"}))
     } catch (error) {
         yield put(failure(error.response.data.error))
     }
@@ -27,7 +28,18 @@ function* handleCategoryUpdate(action) {
         const response = yield call(updateCategoryApi, action.payload);
         const {} = response.data;
 
-        yield put(success())
+        yield put(success({message: "Category updated successfully"}))
+    } catch (error) {
+        yield put(failure(error.response.data.error))
+    }
+}
+
+function* handleCategoryDelete(action) {
+    try {
+        const response = yield call(deleteCategoryApi, action.payload);
+        const {} = response.data;
+
+        yield put(success({message: "Category deleted successfully"}))
     } catch (error) {
         yield put(failure(error.response.data.error))
     }
@@ -36,12 +48,12 @@ function* handleCategoryUpdate(action) {
 // Saga worker for fetching categories
 function* fetchCategoriesSaga(action) {
     try {
-        const {page, limit} = action.payload;
+        console.log(action.payload, {message: "checking "})
+        const {page, limit, query} = action.payload;
 
-        console.log({page, limit}, "Saga limit check")
+        console.log({page, limit,query}, "Saga limit check")
 
-        const result = yield call(fetchingCategoryApi, page, limit);
-
+        const result = yield call(fetchingCategoryApi, page, limit, query);
 
         yield put(fetchCategoriesSuccess({categories: result.data.categories, total: result.data.total}));
     } catch (error) {
@@ -53,6 +65,7 @@ function* categorySaga() {
     yield all([
         yield takeLatest(createRequest.type, handleCategoryCreate),
         yield takeLatest(updateRequest.type, handleCategoryUpdate),
+        yield takeLatest(deleteRequest.type, handleCategoryDelete),
         yield takeLatest(fetchCategoriesStart.type, fetchCategoriesSaga),
     ]);
 }

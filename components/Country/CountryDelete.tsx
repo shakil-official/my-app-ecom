@@ -2,14 +2,14 @@ import React from "react";
 import Swal from "sweetalert2";
 import {DropdownMenuItem} from "@ui/dropdown-menu";
 import {useDispatch} from "react-redux";
-import {deleteRequest} from "@/store/slices/categorySlice";
+import {deleteRequest} from "@/store/slices/countrySlice";
 
 
-interface DeleteCategoryProps {
+interface DeleteCountryProps {
     data: number;
 }
 
-const CategoryDelete: React.FC<DeleteCategoryProps> = ({data}) => {
+const CountryDelete: React.FC<DeleteCountryProps> = ({data}) => {
 
     const dispatch = useDispatch();
 
@@ -41,4 +41,4 @@ const CategoryDelete: React.FC<DeleteCategoryProps> = ({data}) => {
     );
 };
 
-export default CategoryDelete;
+export default CountryDelete;
